@@ -78,7 +78,7 @@
           {num: '500元', active: false},
           {num: '自定义金额', active: false}
         ];
-        this.moneyList[itemIndex].active = true;
+        this.moneyList[itemIndex].active = true
       }
     }
   }

@@ -7,10 +7,17 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Router from 'vue-router';
 import {
   Header, Button, MenuItem, MenuItemGroup, Submenu, RadioButton, RadioGroup, Menu, Aside,
-  Main, Container, Table, TableColumn, Col, Card, Row, Form, FormItem
+  Main, Container, Table, TableColumn, Col, Card, Row, Form, FormItem, Breadcrumb, BreadcrumbItem,
+  Input, ButtonGroup, Dialog, Avatar
 } from 'element-ui';
 
+Vue.use(ButtonGroup);
+Vue.use(Dialog);
+Vue.use(Avatar);
 Vue.use(FormItem);
+Vue.use(Input);
+Vue.use(Breadcrumb);
+Vue.use(BreadcrumbItem);
 Vue.use(Form);
 Vue.use(Header);
 Vue.use(Row);

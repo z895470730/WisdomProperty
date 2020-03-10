@@ -3,10 +3,10 @@
     <div class="house-item" v-for="houseItem in houses">
       <div class="house-img"><img :src="houseItem.imgUrl"/></div>
       <div class="house-desc">
-        <h3 class="house-address">{{houseItem.address}}</h3>
-        <div class="house-desc-other">{{houseItem.direction}}/{{houseItem.layout}}/{{houseItem.area}}m²</div>
+        <h3 class="house-address">{{houseItem.userDetail[0].address}}</h3>
+        <div class="house-desc-other">{{houseItem.position}}/{{houseItem.layout}}/{{houseItem.area}}m²</div>
         <div class="house-id">户号&nbsp;&nbsp;&nbsp;{{houseItem.id}}</div>
-        <div class="house-name">{{houseItem.name}}&nbsp;&nbsp;&nbsp;{{houseItem.tel}}</div>
+        <div class="house-name">{{houseItem.userDetail[0].name}}&nbsp;&nbsp;&nbsp;{{houseItem.userDetail[0].tel}}</div>
       </div>
       <div class="house-price">
         <strong>{{houseItem.price}}</strong>元/月
@@ -19,57 +19,20 @@
     name: '',
     data() {
       return {
-        houses: [{
-          imgUrl:'https://image1.ljcdn.com/410100-inspection/15d48cfe-a6e1-4c7d-afff-26d3bbdb382c.jpg.250x182.jpg',
-          address: '东区-85栋-901号',
-          area: 89,
-          direction: '南',
-          layout: '两室一厅一厨一卫',
-          price: '4000',
-          name: '张三',
-          id: '10001',
-          tel: '17982737797'
-        },{
-          imgUrl:'https://image1.ljcdn.com/410100-inspection/15d48cfe-a6e1-4c7d-afff-26d3bbdb382c.jpg.250x182.jpg',
-          address: '东区-85栋-901号',
-          area: 89,
-          direction: '南',
-          layout: '两室一厅一厨一卫',
-          price: '4000',
-          name: '张三',
-          id: '10001',
-          tel: '17982737797'
-        },{
-          imgUrl:'https://image1.ljcdn.com/410100-inspection/15d48cfe-a6e1-4c7d-afff-26d3bbdb382c.jpg.250x182.jpg',
-          address: '东区-85栋-901号',
-          area: 89,
-          direction: '南',
-          layout: '两室一厅一厨一卫',
-          price: '4000',
-          name: '张三',
-          id: '10001',
-          tel: '17982737797'
-        },{
-          imgUrl:'https://image1.ljcdn.com/410100-inspection/15d48cfe-a6e1-4c7d-afff-26d3bbdb382c.jpg.250x182.jpg',
-          address: '东区-85栋-901号',
-          area: 89,
-          direction: '南',
-          layout: '两室一厅一厨一卫',
-          price: '4000',
-          name: '张三',
-          id: '10001',
-          tel: '17982737797'
-        },{
-          imgUrl:'https://image1.ljcdn.com/410100-inspection/15d48cfe-a6e1-4c7d-afff-26d3bbdb382c.jpg.250x182.jpg',
-          address: '东区-85栋-901号',
-          area: 89,
-          direction: '南',
-          layout: '两室一厅一厨一卫',
-          price: '4000',
-          name: '张三',
-          id: '10001',
-          tel: '17982737797'
-        },]
+        houses: []
+      }
+    },
+    created() {
+      this.getHouseDetail();
+    },
+    methods: {
+      getHouseDetail() {
+        this.axios.get('http://127.0.0.1:8090/api/house')
+          .then((res) => {
+            if(res.status === 200) {
+              this.houses = res.data;
+            }
+          })
       }
     }
   }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '@/components/HomePage';
 import LivingPayment from '@/components/function/LivingPayment';
-import MainTain from '@/components/function/MainTain';
+import Device from '@/components/function/MainTain';
 import HouseRent from '@/components/function/HouseRent';
 import ParkingSpace from '@/components/function/ParkingSpace';
 import ResidentDetail from "@/components/function/ResidentDetail";
@@ -21,7 +21,7 @@ export default new Router({
         {path: '/', name: 'ResidentDetail', component: ResidentDetail},
         {path: 'LivingPayment', name: 'LivingPayment', component: LivingPayment},
         {path: 'ResidentDetail', name: 'ResidentDetail', component: ResidentDetail},
-        {path: 'Maintain', name: 'Maintain', component: MainTain},
+        {path: 'Maintain', name: 'Maintain', component: Device},
         {path: 'HouseRent', name: 'HouseRent', component: HouseRent},
         {path: 'ParkingSpace', name: 'ParkingSpace', component: ParkingSpace},
         {path: 'MessageBoard', name: 'MessageBoard', component: MessageBoard},

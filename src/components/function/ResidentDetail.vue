@@ -29,7 +29,7 @@
               <span>{{ props.row.name }}</span>
             </el-form-item>
             <el-form-item label="身份证号">
-              <span>{{ props.row.IdNumber }}</span>
+              <span>{{ props.row.idNumber }}</span>
             </el-form-item>
             <el-form-item label="成员1">
               <span>{{ props.row.member1 }}</span>
@@ -41,8 +41,22 @@
               <span>{{ props.row.tel }}</span>
             </el-form-item>
             <div style="display: flex; justify-content: center">
-                <el-button size="small" type="primary" icon="el-icon-edit" plain @click="dialogVisible = true">修改</el-button>
-                <el-button size="small" type="danger" icon="el-icon-delete" plain>删除</el-button>
+              <el-button
+                size="small"
+                type="primary"
+                icon="el-icon-edit"
+                plain
+                @click="viewDialog(props.$index, props.row)"
+              > 修改 </el-button>
+              <el-popconfirm title="这是一段内容确定删除吗？">
+                <el-button
+                  size="small"
+                  type="danger"
+                  icon="el-icon-delete"
+                  plain
+                  @click="removeUserDetail(props.row)"
+                > 删除 </el-button>
+              </el-popconfirm>
             </div>
           </el-form>
         </template>
@@ -60,8 +74,15 @@
         prop="name">
       </el-table-column>
       <el-table-column
-        label="欠费信息"
-        prop="name">
+        prop="tag"
+        label="标签"
+        width="100"
+      >
+        <template slot-scope="arreage">
+          <el-tag
+            :type="arreage ? 'success' : 'danger'"
+            disable-transitions>{{arreage ? '缴费正常' : '有欠费信息'}}</el-tag>
+        </template>
       </el-table-column>
     </el-table>
     <el-dialog
@@ -70,26 +91,26 @@
       width="30%"
       :before-close="handleClose"
     >
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="userForm" :model="userForm" label-width="80px">
         <el-form-item label="户主姓名">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="userForm.name" ></el-input>
         </el-form-item>
         <el-form-item label="证件号">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="userForm.idNumber"></el-input>
         </el-form-item>
         <el-form-item label="成员1">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="userForm.member1"></el-input>
         </el-form-item>
         <el-form-item label="成员2">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="userForm.member2"></el-input>
         </el-form-item>
         <el-form-item label="联系电话">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="userForm.tel"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="changeUserDetail">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -100,29 +121,23 @@
     data() {
       return {
         tableData: [{
-          id: '10001',
-          name: '张一',
-          tel: '18939626705',
-          member1: '张二',
-          member2: '张三',
-          address: 'A栋-301',
-          shop: '王小虎夫妻店',
-          IdNumber: '41xxxxxxxxxxxx2012',
-          arrearage: ''
+          id: 0,
+          name: '',
+          tel: '',
+          member1: '',
+          member2: '',
+          address: '',
+          idNumber: '',
+          arreage: false
         }],
         searchText: '',
         dialogVisible: false,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
+        userForm: {},
+        currentIndex: null
       }
+    },
+    mounted() {
+      this.getResidentDetail();
     },
     methods: {
       handleClose(done) {
@@ -131,6 +146,47 @@
             done();
           })
           .catch(_ => {});
+      },
+
+      getResidentDetail() {
+       this.axios.get('http://127.0.0.1:8090/api/user')
+         .then((res)=>{
+           if(res.status === 200) {
+             const data = res.data;
+             this.tableData = data;
+           }
+         })
+      },
+
+      viewDialog(index, detail) {
+        delete detail._id;
+        this.userForm = detail;
+        this.currentIndex = index;
+        this.dialogVisible = true
+      },
+
+      closeDialog() {
+        this.dialogVisible = false;
+      },
+
+      async submitUserDetail() {
+        const index = this.currentIndex;
+        await this.axios.post('http://127.0.0.1:8090/api/modifyUser',{
+            whereStr: this.tableData[index].id,
+            dataStr: this.userForm
+          },{ headers: {'Content-Type': 'application/json'} });
+        await this.getResidentDetail();
+        await this.closeDialog();
+      },
+
+      changeUserDetail() {
+        this.submitUserDetail().then().then().then();
+      },
+
+      async removeUserDetail(row) {
+        this.axios.post('http://127.0.0.1:8090/api/removeUserDetail', {
+          whereStr: row.id
+        }, { headers: {'Content-Type': 'application/json'} })
       }
     }
   }

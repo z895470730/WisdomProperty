@@ -70,14 +70,14 @@
         prop="name">
       </el-table-column>
       <el-table-column
-        prop="tag"
         label="标签"
         width="100"
       >
-        <template slot-scope="arreage">
+        <template slot-scope="scope">
           <el-tag
-            :type="arreage ? 'success' : 'danger'"
-            disable-transitions>{{arreage ? '缴费正常' : '有欠费信息'}}</el-tag>
+            :type="scope.row.arrearage ? 'danger' : 'success'"
+            disable-transitions
+          >{{scope.row.arrearage ? '待缴费' : '缴费正常'}}</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -124,7 +124,7 @@
           member2: '',
           address: '',
           idNumber: '',
-          arreage: false
+          arrearage: false
         }],
         searchText: '',
         dialogVisible: false,
@@ -148,8 +148,9 @@
       getResidentDetail() {
        this.$http.get('http://127.0.0.1:8090/api/user')
          .then((res)=>{
-           if(res.status === 200) {
+           if(res.status < 400 ) {
              const data = res.data;
+             console.log(data)
              this.tableData = data;
            }
          })

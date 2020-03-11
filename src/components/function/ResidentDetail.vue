@@ -41,22 +41,18 @@
               <span>{{ props.row.tel }}</span>
             </el-form-item>
             <div style="display: flex; justify-content: center">
-              <el-button
-                size="small"
-                type="primary"
-                icon="el-icon-edit"
-                plain
-                @click="viewDialog(props.$index, props.row)"
-              > 修改 </el-button>
-              <el-popconfirm title="这是一段内容确定删除吗？">
-                <el-button
-                  size="small"
-                  type="danger"
-                  icon="el-icon-delete"
-                  plain
-                  @click="removeUserDetail(props.row)"
-                > 删除 </el-button>
-              </el-popconfirm>
+              <el-button size="small" type="primary" icon="el-icon-edit" plain @click="viewDialog(props.$index, props.row)">修改</el-button>
+              <el-button size="small" type="danger" icon="el-icon-delete" plain @click="delAffirm = true">删除</el-button>
+              <el-dialog
+                title="提示"
+                :visible.sync="delAffirm"
+                width="30%">
+                <span>确定要删除该条数据吗？</span>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click="delAffirm = false">取 消</el-button>
+                  <el-button type="primary" @click="delDialogControl(props.row)">确 定</el-button>
+                </span>
+              </el-dialog>
             </div>
           </el-form>
         </template>
@@ -133,7 +129,8 @@
         searchText: '',
         dialogVisible: false,
         userForm: {},
-        currentIndex: null
+        currentIndex: null,
+        delAffirm: false
       }
     },
     mounted() {
@@ -149,7 +146,7 @@
       },
 
       getResidentDetail() {
-       this.axios.get('http://127.0.0.1:8090/api/user')
+       this.$http.get('http://127.0.0.1:8090/api/user')
          .then((res)=>{
            if(res.status === 200) {
              const data = res.data;
@@ -171,10 +168,14 @@
 
       async submitUserDetail() {
         const index = this.currentIndex;
-        await this.axios.post('http://127.0.0.1:8090/api/modifyUser',{
+        await this.$http.post('http://127.0.0.1:8090/api/modifyUser',{
             whereStr: this.tableData[index].id,
             dataStr: this.userForm
-          },{ headers: {'Content-Type': 'application/json'} });
+          },{
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
         await this.getResidentDetail();
         await this.closeDialog();
       },
@@ -184,9 +185,15 @@
       },
 
       async removeUserDetail(row) {
-        this.axios.post('http://127.0.0.1:8090/api/removeUserDetail', {
+        await this.$http.post('http://127.0.0.1:8090/api/removeUser', {
           whereStr: row.id
-        }, { headers: {'Content-Type': 'application/json'} })
+        }, { headers: {'Content-Type': 'application/json'} });
+        await this.getResidentDetail();
+        this.delAffirm = false;
+      },
+
+      delDialogControl(row) {
+        this.removeUserDetail(row).then().then();
       }
     }
   }

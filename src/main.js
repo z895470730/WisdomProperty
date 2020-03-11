@@ -8,11 +8,13 @@ import Router from 'vue-router';
 import {
   Header, Button, MenuItem, MenuItemGroup, Submenu, RadioButton, RadioGroup, Menu, Aside,
   Main, Container, Table, TableColumn, Col, Card, Row, Form, FormItem, Breadcrumb, BreadcrumbItem,
-  Input, ButtonGroup, Dialog, Avatar, Tag
+  Input, ButtonGroup, Dialog, Avatar, Tag, Popconfirm, Popover
 } from 'element-ui';
 import Axios from 'axios';
 
 Vue.use(ButtonGroup);
+Vue.use(Popover);
+Vue.use(Popconfirm);
 Vue.use(Dialog);
 Vue.use(Tag);
 Vue.use(Avatar);
@@ -44,7 +46,7 @@ Router.prototype.push = function push(location) {
 };
 
 Vue.config.productionTip = false;
-Vue.prototype.axios = Axios;
+Vue.prototype.$http = Axios;
 
 /* eslint-disable no-new */
 new Vue({

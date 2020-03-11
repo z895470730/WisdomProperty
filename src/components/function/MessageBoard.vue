@@ -4,81 +4,72 @@
       <div class="msg-header">
         <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
         <span class="msg-header-item">{{item.name}}</span>
-        <span class="msg-header-item">{{item.id}}</span>
-        <span class="msg-header-item">{{item.data}}</span>
+        <span class="msg-header-item">{{item.date}}</span>
       </div>
-      <div class="msg-content">{{item.msgContent}}</div>
+      <div class="msg-content">{{item.msg}}</div>
       <div class="msg-btm">
-        <div v-if="item.reverse">
+        <div v-if="item.reply">
           <el-avatar icon="el-icon-user-solid" size="small" class="msg-admin"></el-avatar>
           admin
-          <div class="msg-re">{{item.reverse}}</div>
+          <div class="msg-re">{{item.replyMsg}}</div>
         </div>
-        <span class="msg-re-btn" v-else>回复</span>
+        <el-popover
+          placement="bottom"
+          width="200"
+          trigger="hover"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+        >
+          <div style="display: flex">
+            <el-input v-model="reply"></el-input>
+            <el-button
+              size="mini"
+              type="primary"
+              style="margin-left: 20px"
+              @click="replyMsg(item)"
+            >回复</el-button>
+          </div>
+          <span class="msg-re-btn" v-if="!item.reply" slot="reference">回复</span>
+        </el-popover>
       </div>
     </div>
   </div>
 </template>
 <script>
   export default {
-    name: '',
+    name: 'MessageBoard',
     data() {
       return {
         msg: [{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: ''
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },{
-          id: 10001,
-          name: '张三',
-          msgContent: '这是一则留言',
-          data: '2020-01-10',
-          reverse: '管理员回复了'
-        },]
+          _id: '',
+          name: '',
+          date: '',
+          msg: '',
+          reply: false,
+          replyMsg: ''
+        }],
+        reply: ''
+      }
+    },
+    created() {
+      this.getMsg();
+    },
+    methods: {
+      getMsg() {
+        this.$http.get('http://127.0.0.1:8090/api/message')
+          .then((res) => {
+            if(res.status >= 200 && res.status < 400) {
+              this.msg = res.data;
+            }
+          })
+      },
+
+      replyMsg(item) {
+        console.log(item)
+        this.$http.post('http://127.0.0.1:8090/api/message', {
+          name: item.name,
+          reply: true,
+          replyMsg: this.reply
+        })
       }
     }
   }

@@ -27,7 +27,7 @@
     },
     methods: {
       getHouseDetail() {
-        this.axios.get('http://127.0.0.1:8090/api/house')
+        this.$http.get('http://127.0.0.1:8090/api/house')
           .then((res) => {
             if(res.status === 200) {
               this.houses = res.data;

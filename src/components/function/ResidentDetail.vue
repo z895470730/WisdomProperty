@@ -149,9 +149,7 @@
        this.$http.get('http://127.0.0.1:8090/api/user')
          .then((res)=>{
            if(res.status < 400 ) {
-             const data = res.data;
-             console.log(data)
-             this.tableData = data;
+             this.tableData = res.data;
            }
          })
       },

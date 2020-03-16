@@ -27,7 +27,7 @@
           {name: 'LivingPayment', display: '生活缴费'},
           {name: 'Maintain', display: '设备维护'},
           {name: 'HouseRent', display: '房屋租赁'},
-          {name: 'ParkingSpace', display: '车位信息'},
+          {name: 'AccessRecords', display: '出入记录'},
           {name: 'DutyRoom', display: '值班记录'},
           {name: 'MessageBoard', display: '业主留言'},
         ],

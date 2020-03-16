@@ -8,6 +8,7 @@ import ParkingSpace from '@/components/function/ParkingSpace';
 import ResidentDetail from "@/components/function/ResidentDetail";
 import MessageBoard from '@/components/function/MessageBoard';
 import DutyRoom from '@/components/function/DutyRoom';
+import AccessRecords from '@/components/function/AccessRecords';
 
 Vue.use(Router);
 
@@ -26,6 +27,7 @@ export default new Router({
         {path: 'ParkingSpace', name: 'ParkingSpace', component: ParkingSpace},
         {path: 'MessageBoard', name: 'MessageBoard', component: MessageBoard},
         {path: 'DutyRoom', name: 'DutyRoom', component: DutyRoom},
+        {path: 'AccessRecords', name: 'AccessRecords', component: AccessRecords}
       ]
     }
   ]

@@ -88,14 +88,14 @@
           whereStr: this.userId,
           data: {
             type: this.typeActiveChar,
-            value: this.moneyActive
+            value: Number.parseInt(this.moneyActive) + Number.parseInt(this.searchDetail[this.typeActiveChar])
           }
         },{
           headers: {
             'Content-Type': 'application/json'
           }
         })
-          .then((res) => {
+          .then(() => {
             this.getUserBalance(this.userId);
           })
       }
